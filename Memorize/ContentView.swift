@@ -8,49 +8,60 @@
 import SwiftUI
 
 struct ContentView: View {
-    var emojis = ["🚁", "🚇", "🚃", "🚀", "🚐", "🚙", "🚌", "🚅", "🚆", "🛴", "🚜", "🛳", "✈️",
-    "🚠", "🚔", "🏎"]
-    @State var emojiCount = 4
+    var themes = [
+        "vehicle_emojis": ["🚁", "🚇", "🚃", "🚀", "🚐", "🚙", "🚌", "🚅", "🚆",
+                  "🛴", "🚜", "🛳", "✈️","🚠", "🚔", "🏎", "🚡", "🚞",
+                  "🚕", "🏍", "🚢", "🛺", "⛴", "🚲"],
+    
+        "clothes_emojis": ["🥋", "🥻", "🥼", "🦺", "🧢", "🧥", "👖", "🧦", "🩱",
+                          "🩲", "🩳", "👔", "🧤", "👗", "👘", "👙", "👕"],
+    
+        "sports_emojis": ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🥏",
+                         "🎱", "🪀", "🏓", "🏸", "🏒", "🏑", "🥍", "🪃", "🥅"]
+    ]
+    
+    @State var currentTheme : String = "clothes_emojis"
     var body: some View {
         VStack{
+            Text("Memorize!")
+                .padding(.horizontal)
+                .foregroundColor(.blue)
+                .font(.largeTitle)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
+                    ForEach(themes[currentTheme]![0..<themes[currentTheme]!.count], id: \.self) { emoji in
                         CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
                     }
                 }
             }
             Spacer()
-            HStack {
-                remove
-                Spacer()
-                add
-            }
-            .padding(.horizontal)
-            .font(.largeTitle)
+            getThemeTab.padding(.horizontal).font(.title)
         }
         .padding(.horizontal)
         .foregroundColor(.red)
     }
     
-    var add: some View {
-        Button(action: {
-            if emojiCount < emojis.count {
-                emojiCount += 1
+    var getThemeTab : some View {
+        HStack {
+            VStack {
+                Image(systemName: "car.fill").foregroundColor(.blue)
+                Text("Vehicle").font(.body).foregroundColor(.blue)
+            }.padding([.top, .leading, .trailing]).onTapGesture {
+                currentTheme = "vehicle_emojis"
             }
-        }, label: {
-            Image(systemName: "plus.circle")
-        }).foregroundColor(.blue)
-    }
-    
-    var remove: some View {
-        Button(action: {
-            if emojiCount > 1 {
-                emojiCount -= 1
+            VStack {
+                Image(systemName: "person.fill").foregroundColor(.blue)
+                Text("Clothes").font(.body).foregroundColor(.blue)
+            }.padding([.top, .leading, .trailing]).onTapGesture {
+                currentTheme = "clothes_emojis"
             }
-        }, label: {
-            Image(systemName: "minus.circle")
-        }).foregroundColor(.blue)
+            VStack {
+                Image(systemName: "sportscourt.fill").foregroundColor(.blue)
+                Text("Sports").font(.body).foregroundColor(.blue)
+            }.padding([.top, .leading, .trailing]).onTapGesture {
+                currentTheme = "sports_emojis"
+            }
+        }
     }
 }
 
